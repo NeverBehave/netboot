@@ -75,11 +75,18 @@ func (s *Server) logTFTPTransfer(clientAddr net.Addr, path string, err error) {
 
 func (s *Server) handleTFTP(path string, clientAddr net.Addr) (io.ReadCloser, int64, error) {
 	_, i, err := extractInfo(path)
-	if err != nil {
-		return nil, 0, fmt.Errorf("unknown path %q", path)
-	}
+	var bs []byte
+	ok := false
+	if path == "netboot.xyz.efi" {
+		bs, ok = s.Ipxe[999]
+	} else {
 
-	bs, ok := s.Ipxe[Firmware(i)]
+		if err != nil {
+			return nil, 0, fmt.Errorf("unknown path %q", path)
+		}
+
+		bs, ok = s.Ipxe[Firmware(i)]
+	}
 	if !ok {
 		return nil, 0, fmt.Errorf("unknown firmware type %d", i)
 	}

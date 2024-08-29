@@ -27,5 +27,9 @@ func main() {
 	cli.Ipxe[pixiecore.FirmwareEFI64] = ipxe.MustAsset("third_party/ipxe/src/bin-x86_64-efi/ipxe.efi")
 	cli.Ipxe[pixiecore.FirmwareEFIBC] = ipxe.MustAsset("third_party/ipxe/src/bin-x86_64-efi/ipxe.efi")
 	cli.Ipxe[pixiecore.FirmwareX86Ipxe] = ipxe.MustAsset("third_party/ipxe/src/bin/ipxe.pxe")
+	
+	// monkey patch to serve netboot via tftp
+	cli.Ipxe[999] = ipxe.MustAsset("third_party/netboot/netboot.xyz.efi")
+
 	cli.CLI()
 }
