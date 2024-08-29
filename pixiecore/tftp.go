@@ -43,7 +43,7 @@ func (s *Server) serveTFTP(l net.PacketConn) error {
 func extractInfo(path string) (net.HardwareAddr, int, error) {
 	pathElements := strings.Split(path, "/")
 	if len(pathElements) != 2 {
-		return nil, 0, errors.New("not found")
+		return nil, 0, errors.New("path does not contain two segments: " + path)
 	}
 
 	mac, err := net.ParseMAC(pathElements[0])
@@ -53,7 +53,7 @@ func extractInfo(path string) (net.HardwareAddr, int, error) {
 
 	i, err := strconv.Atoi(pathElements[1])
 	if err != nil {
-		return nil, 0, errors.New("not found")
+		return nil, 0, errors.New("unable to convert filename to int: " + pathElements[1])
 	}
 
 	return mac, i, nil
@@ -63,7 +63,7 @@ func (s *Server) logTFTPTransfer(clientAddr net.Addr, path string, err error) {
 	mac, _, pathErr := extractInfo(path)
 	if pathErr != nil {
 		s.log("TFTP", "unable to extract mac from request:%v", pathErr)
-		return
+		// lets keep going and see what's happened
 	}
 	if err != nil {
 		s.log("TFTP", "Send of %q to %s failed: %s", path, clientAddr, err)
