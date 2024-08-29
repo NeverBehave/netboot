@@ -55,6 +55,7 @@ update-ipxe:
 	bin-x86_64-efi/ipxe.efi \
 	bin-i386-efi/ipxe.efi
 	go-bindata -o out/ipxe/bindata.go -pkg ipxe -nometadata -nomemcopy \
+	third_party/netboot/netboot.xyz.efi \
 	third_party/ipxe/src/bin/ipxe.pxe \
 	third_party/ipxe/src/bin/undionly.kpxe \
 	third_party/ipxe/src/bin-x86_64-efi/ipxe.efi \
